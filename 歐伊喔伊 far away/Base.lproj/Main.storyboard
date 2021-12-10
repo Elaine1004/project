@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="MM3-Fk-0Up">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19528" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="MM3-Fk-0Up">
     <device id="retina6_0" orientation="portrait" appearance="light"/>
     <dependencies>
-        <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -33,33 +32,23 @@
                         <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="top" semanticContentAttribute="forceLeftToRight" mapType="standard" showsUserLocation="YES" showsScale="YES" id="HMd-ke-1Yj">
-                                <rect key="frame" x="48" y="172" width="308" height="598"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                <color key="tintColor" systemColor="linkColor"/>
-                            </mapView>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NmJ-zy-qKi">
-                                <rect key="frame" x="48" y="116" width="110" height="48"/>
+                                <rect key="frame" x="140" y="113" width="110" height="48"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" systemColor="quaternarySystemFillColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="23"/>
-                                <state key="normal" title="record">
+                                <state key="normal" title="開始錄音">
                                     <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                                 <connections>
-                                    <action selector="record:" destination="BYZ-38-t0r" eventType="touchDown" id="e2F-fe-Qa4"/>
+                                    <action selector="record:" destination="BYZ-38-t0r" eventType="touchDown" id="9Fk-Fr-HZE"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ql8-Sl-Igm">
-                                <rect key="frame" x="236" y="123" width="99" height="38"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" systemColor="systemGray6Color"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="21"/>
-                                <state key="normal" title="play"/>
-                                <connections>
-                                    <action selector="play:" destination="BYZ-38-t0r" eventType="touchDown" id="165-2I-tL5"/>
-                                </connections>
-                            </button>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="top" semanticContentAttribute="forceLeftToRight" mapType="standard" showsUserLocation="YES" showsScale="YES" id="HMd-ke-1Yj">
+                                <rect key="frame" x="38" y="169" width="314" height="601"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <color key="tintColor" systemColor="linkColor"/>
+                            </mapView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -72,13 +61,12 @@
                     <navigationItem key="navigationItem" title="歐伊喔伊 far away" id="Wij-tR-bDq"/>
                     <connections>
                         <outlet property="MapView" destination="HMd-ke-1Yj" id="JQM-zd-0pM"/>
-                        <outlet property="play" destination="ql8-Sl-Igm" id="yW7-pa-MVs"/>
                         <outlet property="record" destination="NmJ-zy-qKi" id="Tz6-RT-PjA"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="237.68115942028987" y="112.5"/>
+            <point key="canvasLocation" x="236.92307692307691" y="112.32227488151658"/>
         </scene>
     </scenes>
     <color key="tintColor" systemColor="darkTextColor"/>
@@ -94,9 +82,6 @@
         </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
-        <systemColor name="systemGray6Color">
-            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

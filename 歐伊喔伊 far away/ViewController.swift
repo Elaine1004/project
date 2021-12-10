@@ -13,15 +13,13 @@ import CoreLocation
 class ViewController:UIViewController,MKMapViewDelegate, AVAudioRecorderDelegate, CLLocationManagerDelegate, AVAudioPlayerDelegate {
     @IBOutlet weak var MapView: MKMapView!  //地圖宣告
    //檔名按照數字命名
-    var numOfRecorder: Int = 0
-    let number : Int = 0
-    var audioplayer : AVAudioPlayer!
+  //  var numOfRecorder: Int = 0
+   // var audioplayer : AVAudioPlayer! 測試音檔能不能播放
     @IBOutlet weak var record: UIButton!
-    @IBOutlet weak var play: UIButton!
+   // @IBOutlet weak var play: UIButton!
     var audioRecorder : AVAudioRecorder!  //宣告錄音
     var session : AVAudioSession!
-    //AVAudioSession 是管理多個APP對音頻硬件設備（麥克風，揚聲器）的資源使用
-    
+    //AVAudioSession 是管理多個APP對音頻硬件設備（麥克風，揚聲器）的資源使用   
   
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,19 +28,28 @@ class ViewController:UIViewController,MKMapViewDelegate, AVAudioRecorderDelegate
                //追蹤使用者定位
         MapView.showsUserLocation = true //出現使用者位置
         MapView.userTrackingMode = .follow //追蹤使用者位置
+        lm.distanceFilter =
+          kCLLocationAccuracyNearestTenMeters
         lm.desiredAccuracy = kCLLocationAccuracyBest //位置精準度
         lm.delegate = self
         lm.distanceFilter = kCLLocationAccuracyNearestTenMeters
-        lm.desiredAccuracy = kCLLocationAccuracyBest;
+        lm.desiredAccuracy = kCLLocationAccuracyBest
         //允許存取使用者位置
-        lm.requestAlwaysAuthorization()
+      //  lm.requestAlwaysAuthorization()
         lm.requestWhenInUseAuthorization()
         //更新使用者位置
         lm.startUpdatingLocation()
-        
+       
+        //當是Dark Mode時，會改變錄音按鈕的背景顏色及文字顏色
+        if self.traitCollection.userInterfaceStyle == .dark {
+            //為 Dark Mode 設定buttom為淺色
+            record.backgroundColor = UIColor.white
+            record.setTitleColor(UIColor.gray, for: .normal)
+                   
+               } else {
+               }
 
-
-          
+     
       
 
              //
@@ -76,31 +83,32 @@ class ViewController:UIViewController,MKMapViewDelegate, AVAudioRecorderDelegate
            view.addSubview(record)
         
        }
-    //錄音設定
-    func startRecording() {
-            let audioFilename = getFileURL()
+    //開始錄音
+    @objc func startRecording() {
+            let audioFilename = getFileURL() //取得檔案位置
             //設置音檔格式
             let settings = [
                 AVFormatIDKey: Int(kAudioFormatLinearPCM),
                 AVSampleRateKey: 44100,
-                AVNumberOfChannelsKey: 2, //雙聲道
+                AVNumberOfChannelsKey: 1, //雙聲道無法傳給後端 //單聲道可以
                 AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue
             ]
-            
             do {
+                
                 audioRecorder = try AVAudioRecorder(url: audioFilename, settings: settings)
                 audioRecorder.delegate = self  //部分的責任能夠交給或委任給另一個實例化的class
                 audioRecorder.prepareToRecord()
-                audioRecorder.record()
+                audioRecorder.record() //開始錄音
+             
                 
-                record.setTitle("Stop", for: .normal)
+                record.setTitle("錄音中", for: .normal)//錄音開始設定錄音的字
               //  play.isEnabled = false
             } catch {
                 finishRecording(success: false)
             }
         }
-   
-    @IBAction func play(_ sender: UIButton) {
+   //測試用
+ /*   @IBAction func play(_ sender: UIButton) {
     
    
         if (sender.titleLabel?.text == "play"){
@@ -129,35 +137,50 @@ class ViewController:UIViewController,MKMapViewDelegate, AVAudioRecorderDelegate
         audioplayer.volume = 10.0
         }
          
-       }
+       }*/
+    
+   
         //結束錄音
-         func finishRecording(success: Bool) {
+    @objc func finishRecording(success: Bool) {
+        
+       
              audioRecorder.stop()
              audioRecorder = nil
-            record.setTitle("record", for: .normal)
+             record.setTitle("錄音結束", for: .normal)
+      
+  
 
-            
              
             // play.isEnabled = true
             // record.isEnabled = true
          }
          
     
+
+
+
+   
          
         //  儲存檔案位置
          func getDocumentsDirectory() -> URL {
-             let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-             return paths[0]
+            let path = NSHomeDirectory() + "/Documents"
+            let url  = URL(fileURLWithPath: path)
+            return url
+             
          }
          //儲存檔案名稱
          func getFileURL() -> URL {
-            var numOfRecorder: Int = 0
-
+             /*   var numOfRecorder: Int = 0
             if let number: Int = UserDefaults.standard.object(forKey: "myNumber") as? Int {
               numOfRecorder = number
             }
-             let path = getDocumentsDirectory().appendingPathComponent("./\(numOfRecorder).wav")
-             return path as URL
+            let path =  getDocumentsDirectory().appendingPathComponent("test.wav")*/
+            let fileManager = FileManager.default
+            let urls = fileManager.urls(for: .documentDirectory, in: .userDomainMask)
+            let documentDirectory = urls[0] as URL
+            let soundURL = documentDirectory.appendingPathComponent("recording.wav")
+          
+             return soundURL
          }
          
          //MARK: Delegates
@@ -182,75 +205,149 @@ class ViewController:UIViewController,MKMapViewDelegate, AVAudioRecorderDelegate
                 print("Error while playing audio \(error!.localizedDescription)")
          }
    
-         
-         
+   
     
-    
-     
+   
     @IBAction func record(_ sender: UIButton) {
         
-      //如果錄音等於空值會開始錄音，否則結束錄音
+      //如果錄音等於空值時會開始錄音，否則結束錄音
         if audioRecorder == nil {
-                    startRecording()
-                } else {
-                    finishRecording(success: true)
+            startRecording()
+            
+            } else {
+                 //錄音結束
+                finishRecording(success: true)
+                
+                do{ //api到後端 傳錄音檔
+                let recordingData: Data? = try? Data(contentsOf: getFileURL() as URL)//取得資料
+                let boundary = gBoundary() //
+                let startBoundary = "--\(boundary)"
+                let endingBoundary = "--\(boundary)--"
+                    //http://ambulance.nutc.edu.tw:443/
+                let url = URL(string: "http://0.0.0.0:5000/")
+                var body = Data()//宣告資料
+                let header = "Content-Disposition:form-data;name=audio;filename=recording.wav" //要傳給後端的檔名、名稱
+                body.append(("\(startBoundary)\r\n" as String).data(using:.utf8)!)//Body加入資料
+                body.append((header as String).data(using:.utf8)!) //檔案以utf-8編碼增加。
+                body.append(("Content-Type: application/octet-stream\r\n\r\n" as String).data(using:.utf8)!)
+                body.append(recordingData!)//加入錄音檔
+                body.append(("\r\n\(endingBoundary)\r\n" as String).data(using:.utf8)!)
+
+                var request = URLRequest(url: url!)
+                request.httpMethod = "POST" //http request
+                request.httpBody = body // 加入在網站的body裡
+                request.setValue("multipart/form-data;boundary=\(boundary)",forHTTPHeaderField: "Content-Type")
+                request.setValue("application/json",forHTTPHeaderField: "Accept")
+            
+
+                let session = URLSession.shared//傳送http request的方式傳遞資料
+                let task = session.dataTask(with: request){ (data, response,error) in
+                            print("Upload complete!")
+
+                            if let error = error{
+                                  print("error: \(error)")
+                                  return
+                              }
+
+                            guard let response = response as? HTTPURLResponse,
+                                  (200...299).contains(response.statusCode) else {
+                                      print("Error on server side!")
+                                      return
+                              }
+
+                              if let mimeType = response.mimeType,
+                              mimeType == "audio/wav",
+                              let data = data,
+                                  let dataStr = String(data: data, encoding: .utf8){
+                                  print("data is \(dataStr)")
+                              }
+                  
+                          }
+                    task.resume()//用resume啟動 task
+                    
                 }
-        
-        
-      
-   
-    //api傳送到後端
-    
-    func sent (){
-        var task: URLSessionDataTask!
-        let url = URL(string: "http://0.0.0.0:5000")!
-        var request1 = URLRequest(url: url,
-                                  cachePolicy: .reloadRevalidatingCacheData)
-        request1.httpMethod = "POST"
-         task = URLSession.shared.dataTask(with: url) { data, response, error in
-            if data != nil {
-                var re = self.audioRecorder
-            } else if let error = error {
-                print("HTTP Request Failed \(error)")
+                
+                get()
+                      
+                
             }
-           
-       // request1.httpBody = "\(numOfRecorder).wav".data(using: )
-        task.resume()
+        func gBoundary() -> String{
+            return "Boundary-\(NSUUID().uuidString)" //轉換編碼
+        }
         
         
+        //get獲得後端回傳值
+        func get(){
+            //列舉回傳值訊息
+            enum type: String {
+                   case A1 = "救護車逐漸遠離"
+                   case A2 = "救護車逐漸靠近"
+                   case B1 = "警車逐漸遠離"
+                   case B2 = "警車逐漸靠近"
+                   case C1 = "消防車逐漸遠離"
+                   case C2 = "消防車逐漸靠近"
+               }
+            
+        
+        do  {
+            //http://ambulance.nutc.edu.tw:443/
+               let url = URL(string: "http://0.0.0.0:5000/")
+               let value = try String(contentsOf: url!)
+               //api 從後端取得回傳值。
+               if value == "A1" {
+                   let controller = UIAlertController(title: "提醒視窗", message: type.A1.rawValue, preferredStyle: .alert)
+                   let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                   controller.addAction(okAction)
+                  return  present(controller, animated: true, completion: nil)
 
-    }
-    
-    
-    //api傳送到前端
-    func get(date: String) {
-      
-      var request = URLRequest(url: URL(string: "http://0.0.0.0:5000/")!)
-      request.httpMethod = "GET"
-        //是一個請求的 HTTP 標頭，而 “content-type” 是鍵，”application/json” 就是所對應的值
-      request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-      request.setValue("\(numOfRecorder).wav", forHTTPHeaderField: "Content-Length")
-      let session = URLSession.shared
-      let task = session.dataTask(with: request, completionHandler: { data, response, error -> Void in
-          do {
-              let json = try JSONSerialization.jsonObject(with: data!) as! Dictionary<String, AnyObject>
-              if let respond = json.values.first {
-                  DispatchQueue.main.async {
-                      let temp = respond as! String
-                    let controller = UIAlertController(title: "警笛聲提醒", message: temp, preferredStyle: .alert)
-
-                  }
-              }
+               }
+               else if value == "A2" {
+                   let controller = UIAlertController(title: "提醒視窗", message: type.A2.rawValue, preferredStyle: .alert)
+                   let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                   controller.addAction(okAction)
+                   return present(controller, animated: true, completion: nil)
+                   
+               }
+               else if value == "B1" {
+                   let controller = UIAlertController(title: "提醒視窗", message: type.B1.rawValue, preferredStyle: .alert)
+                   let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                   controller.addAction(okAction)
+                  return  present(controller, animated: true, completion: nil)
+               
+               }
+               else if value == "B2" {
+                   let controller = UIAlertController(title: "提醒視窗", message: type.B2.rawValue, preferredStyle: .alert)
+                   let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                   controller.addAction(okAction)
+                 return   present(controller, animated: true, completion: nil)
+               
+               }
+               else if value == "C1" {
+                   let controller = UIAlertController(title: "提醒視窗", message: type.C1.rawValue ,preferredStyle: .alert)
+                   let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                   controller.addAction(okAction)
+                  return present(controller, animated: true, completion: nil)
               
-          } catch {
-              print("error")
-          }
-      })
-      
-      task.resume()
-  }
-    
+               }
+               else if value == "C2"{
+                   let controller = UIAlertController(title: "提醒視窗", message: type.C2.rawValue, preferredStyle: .alert)
+                   let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                   controller.addAction(okAction)
+                   return  present(controller, animated: true, completion: nil)
+                   
+               }
+           }catch{ //印出錯誤
+               print(error)
+           }
+                 
+        }
+        
+        
+        
 }
+}
+ 
 
-}
-}
+   
+    
+
