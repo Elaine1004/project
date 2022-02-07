@@ -1,4 +1,4 @@
-# project
+project
 專題題目：歐伊喔伊 far away 警笛聲來向提醒APP                                                                                                                                            
 使用技術：python、flask、swift、Android                                                                                                                                   
 1.蒐集救護車、警車、消防車及遠離靠近的音檔                                                                                                                                    
