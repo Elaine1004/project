@@ -5,4 +5,4 @@ project
 2.用python訓練及建立辨別模型。                                                                                                                                                   
 3.使用者可以在APP上錄音，錄音音檔會傳回後端判斷再傳回前端後，顯示提醒使用者的視窗。                                                                                                            
 負責項目：蒐集音檔、訓練模型、iOS APP撰寫。                                                                                                                                           
-其他小作品：https://github.com/Elaine1004/APP
+專題相關文件：https://drive.google.com/drive/folders/1nPVKjWXDxCDDlDwNvd7fHRhJSeHHKejX 
